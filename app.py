@@ -363,7 +363,7 @@ def main():
                 values=prediksi_counts.values,
                 names=prediksi_counts.index,
                 title='Distribusi Status Prediksi Kecamatan',
-                color_discrete_sequence=px.colors.sequential.RdYlGn_r
+                color_discrete_sequence=['#dc2626', '#f59e0b', '#10b981']
             )
             st.plotly_chart(fig_pie, use_container_width=True)
         
@@ -438,7 +438,7 @@ def main():
                 x=bbtb_counts.index,
                 y=bbtb_counts.values,
                 color=bbtb_counts.values,
-                color_continuous_scale='RdYlGn_r',
+                color_continuous_scale='RdYlGn',
                 labels={'x': 'Status BB/TB', 'y': 'Jumlah'}
             )
             st.plotly_chart(fig_bbtb, use_container_width=True)
@@ -451,7 +451,7 @@ def main():
                 x=bbu_counts.index,
                 y=bbu_counts.values,
                 color=bbu_counts.values,
-                color_continuous_scale='RdYlGn_r',
+                color_continuous_scale='RdYlGn',
                 labels={'x': 'Status BB/U', 'y': 'Jumlah'}
             )
             st.plotly_chart(fig_bbu, use_container_width=True)
