@@ -45,7 +45,17 @@ st.markdown("""
 def load_csv_data(file_path):
     """Load and process CSV data"""
     try:
-        df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=',', encoding='utf-8')
+        # Try different separators
+        for sep in ['\t', ',', ';']:
+            try:
+                df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=sep, encoding='utf-8', on_bad_lines='skip')
+                if len(df.columns) > 5:  # Valid if more than 5 columns
+                    return df
+            except:
+                continue
+        
+        # If all fail, try auto-detect
+        df = pd.read_csv("data/kecamatan_sidoarjo.geojson", encoding='utf-8', on_bad_lines='skip')
         return df
     except Exception as e:
         st.error(f"Error loading CSV: {e}")
@@ -55,7 +65,7 @@ def load_csv_data(file_path):
 def load_geojson_data(file_path):
     """Load GeoJSON data"""
     try:
-        with open("data/kecamatan_sidoarjo.geojson", 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             geojson = json.load(f)
         return geojson
     except Exception as e:
@@ -183,12 +193,15 @@ def main():
         df = load_csv_data(csv_path)
         geojson = load_geojson_data(geojson_path)
     
-    # DEBUG: Show columns
+    # DEBUG: Show data structure
     if df is not None:
-        st.write("**DEBUG - Kolom CSV yang tersedia:**")
-        st.write(list(df.columns))
-        st.write("**DEBUG - 5 Baris Pertama:**")
-        st.dataframe(df.head())
+        with st.expander("🔍 DEBUG - Info Dataset", expanded=False):
+            st.write(f"**Jumlah Baris:** {len(df)}")
+            st.write(f"**Jumlah Kolom:** {len(df.columns)}")
+            st.write("**Nama Kolom:**")
+            st.write(df.columns.tolist())
+            st.write("**Sample Data (5 baris pertama):**")
+            st.dataframe(df.head())
     
     if df is None or geojson is None:
         st.error("⚠️ Pastikan file data tersedia di folder 'data/'")
@@ -470,4 +483,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
