@@ -183,6 +183,13 @@ def main():
         df = load_csv_data(csv_path)
         geojson = load_geojson_data(geojson_path)
     
+    # DEBUG: Show columns
+    if df is not None:
+        st.write("**DEBUG - Kolom CSV yang tersedia:**")
+        st.write(list(df.columns))
+        st.write("**DEBUG - 5 Baris Pertama:**")
+        st.dataframe(df.head())
+    
     if df is None or geojson is None:
         st.error("⚠️ Pastikan file data tersedia di folder 'data/'")
         st.info("""
@@ -463,4 +470,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
