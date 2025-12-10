@@ -48,14 +48,14 @@ def load_csv_data(file_path):
         # Try different separators
         for sep in ['\t', ',', ';']:
             try:
-                df = pd.read_csv(file_path, sep=sep, encoding='utf-8', on_bad_lines='skip')
+                df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=sep, encoding='utf-8', on_bad_lines='skip')
                 if len(df.columns) > 5:  # Valid if more than 5 columns
                     return df
             except:
                 continue
         
         # If all fail, try auto-detect
-        df = pd.read_csv(file_path, encoding='utf-8', on_bad_lines='skip')
+        df = pd.read_csv("data/data_skrinning_stunting(1).csv", encoding='utf-8', on_bad_lines='skip')
         return df
     except Exception as e:
         st.error(f"Error loading CSV: {e}")
@@ -65,7 +65,7 @@ def load_csv_data(file_path):
 def load_geojson_data(file_path):
     """Load GeoJSON data"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open("data/kecamatan_sidoarjo.geojson", 'r', encoding='utf-8') as f:
             geojson = json.load(f)
         return geojson
     except Exception as e:
@@ -514,3 +514,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
