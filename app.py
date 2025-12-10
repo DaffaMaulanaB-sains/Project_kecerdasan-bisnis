@@ -121,27 +121,32 @@ def aggregate_by_kecamatan(df):
     return pd.DataFrame(kec_stats)
 
 def create_choropleth_map(geojson, stats_df):
-    """Create choropleth map with stunting data"""
-    
-    # Normalize geojson kecamatan names
+
+    # Samakan format nama kecamatan
+    stats_df['kecamatan_norm'] = stats_df['kecamatan'].str.upper().str.strip()
     for feature in geojson['features']:
-        feature['properties']['WADMKC'] = feature['properties']['WADMKC'].strip()
-    
-    # Merge geojson properties with stats
-    for feature in geojson['features']:
-        kecamatan_name = feature['properties']['WADMKC']
-        kec_stat = stats_df[stats_df['kecamatan'] == kecamatan_name]
-        
-        if not kec_stat.empty:
-            feature['properties']['stunting_count'] = int(kec_stat['stunting'].values[0])
-            feature['properties']['persentase_stunting'] = float(kec_stat['persentase_stunting'].values[0])
-            feature['properties']['total_balita'] = int(kec_stat['total'].values[0])
-            feature['properties']['kategori'] = kec_stat['kategori'].values[0]
-        else:
-            feature['properties']['stunting_count'] = 0
-            feature['properties']['persentase_stunting'] = 0
-            feature['properties']['total_balita'] = 0
-            feature['properties']['kategori'] = 'Tidak Ada Data'
+        feature['properties']['WADMKC'] = feature['properties']['WADMKC'].upper().strip()
+
+    # Pakai kolom yang sudah distandarkan
+    fig = px.choropleth_mapbox(
+        stats_df,
+        geojson=geojson,
+        locations='kecamatan_norm',
+        featureidkey='properties.WADMKC',
+        color='persentase_stunting',
+        hover_name='kecamatan',
+        hover_data=['total', 'stunting', 'persentase_stunting'],
+        mapbox_style="carto-positron",
+        center={"lat": -7.45, "lon": 112.72},
+        zoom=10.5,
+        opacity=0.8
+    )
+
+    fig.update_traces(marker_line_width=1.5, marker_line_color="white")
+    fig.update_layout(margin={"r":0,"t":0,"l":0,"b":0})
+
+    return fig
+
     
     # Create choropleth map
     fig = px.choropleth_mapbox(
@@ -514,3 +519,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
