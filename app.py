@@ -54,18 +54,13 @@ def load_csv_data(file_path):
             except:
                 continue
         
-        # If all fail, try auto-detect
-        df = pd.read_csv("data/kecamatan_sidoarjo.geojson", encoding='utf-8', on_bad_lines='skip')
-        return df
-    except Exception as e:
-        st.error(f"Error loading CSV: {e}")
-        return None
+    
 
 @st.cache_data
 def load_geojson_data(file_path):
     """Load GeoJSON data"""
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open("data/kecamatan_sidoarjo.geojson", 'r', encoding='utf-8') as f:
             geojson = json.load(f)
         return geojson
     except Exception as e:
@@ -483,3 +478,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
