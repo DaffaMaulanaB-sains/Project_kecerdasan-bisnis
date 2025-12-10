@@ -76,6 +76,9 @@ def aggregate_by_kecamatan(df):
     """Aggregate stunting data by kecamatan"""
     kec_stats = []
     
+    # Normalize kecamatan names
+    df['nama_kecamatan'] = df['nama_kecamatan'].str.strip()
+    
     for kecamatan in df['nama_kecamatan'].unique():
         kec_data = df[df['nama_kecamatan'] == kecamatan]
         
@@ -120,6 +123,10 @@ def aggregate_by_kecamatan(df):
 def create_choropleth_map(geojson, stats_df):
     """Create choropleth map with stunting data"""
     
+    # Normalize geojson kecamatan names
+    for feature in geojson['features']:
+        feature['properties']['WADMKC'] = feature['properties']['WADMKC'].strip()
+    
     # Merge geojson properties with stats
     for feature in geojson['features']:
         kecamatan_name = feature['properties']['WADMKC']
@@ -158,14 +165,20 @@ def create_choropleth_map(geojson, stats_df):
         ],
         mapbox_style="open-street-map",
         center={"lat": -7.45, "lon": 112.72},
-        zoom=10,
-        opacity=0.7,
+        zoom=10.5,
+        opacity=0.9,
         labels={
             'persentase_stunting': 'Persentase Stunting (%)',
             'total': 'Total Balita',
             'stunting': 'Kasus Stunting',
             'prediksi': 'Prediksi'
         }
+    )
+    
+    # Update traces for better visibility
+    fig.update_traces(
+        marker_line_width=2,
+        marker_line_color='white'
     )
     
     fig.update_layout(
@@ -200,6 +213,24 @@ def main():
             st.write(f"**Jumlah Kolom:** {len(df.columns)}")
             st.write("**Nama Kolom:**")
             st.write(df.columns.tolist())
+            st.write("**Kecamatan Unik di CSV:**")
+            st.write(sorted(df['nama_kecamatan'].unique().tolist()))
+            
+            if geojson:
+                geojson_kec = [f['properties']['WADMKC'] for f in geojson['features']]
+                st.write("**Kecamatan di GeoJSON:**")
+                st.write(sorted(geojson_kec))
+                
+                # Check matching
+                csv_kec = set(df['nama_kecamatan'].unique())
+                geo_kec = set(geojson_kec)
+                st.write("**✅ Kecamatan yang MATCH:**")
+                st.write(sorted(csv_kec & geo_kec))
+                st.write("**❌ Kecamatan di CSV tapi TIDAK di GeoJSON:**")
+                st.write(sorted(csv_kec - geo_kec))
+                st.write("**❌ Kecamatan di GeoJSON tapi TIDAK di CSV:**")
+                st.write(sorted(geo_kec - csv_kec))
+            
             st.write("**Sample Data (5 baris pertama):**")
             st.dataframe(df.head())
     
