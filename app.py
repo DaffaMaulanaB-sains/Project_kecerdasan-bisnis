@@ -65,7 +65,7 @@ def load_csv_data(file_path):
 def load_geojson_data(file_path):
     """Load GeoJSON data"""
     try:
-        with open("data/peta_sidoarjo.geojson", 'r', encoding='utf-8') as f:
+        with open("data/peta_sidoarjo.geojson, 'r', encoding='utf-8') as f:
             geojson = json.load(f)
         return geojson
     except Exception as e:
@@ -514,5 +514,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
