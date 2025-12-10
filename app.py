@@ -51,8 +51,7 @@ def load_csv_data(file_path):
                 df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=sep, encoding='utf-8', on_bad_lines='skip')
                 if len(df.columns) > 5:  # Valid if more than 5 columns
                     return df
-            except:
-                continue
+        
         
     
 
@@ -478,4 +477,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 
