@@ -45,7 +45,7 @@ st.markdown("""
 def load_csv_data(file_path):
     """Load and process CSV data"""
     try:
-        df = pd.read_csv("data_skrinning_stunting(1).csv", sep='\t', encoding='utf-8')
+        df = pd.read_csv(file_path, sep='\t', encoding='utf-8')
         return df
     except Exception as e:
         st.error(f"Error loading CSV: {e}")
@@ -55,7 +55,7 @@ def load_csv_data(file_path):
 def load_geojson_data(file_path):
     """Load GeoJSON data"""
     try:
-        with open("kecamatan_sidoarjo.geojson", 'r', encoding='utf-8') as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             geojson = json.load(f)
         return geojson
     except Exception as e:
@@ -176,8 +176,8 @@ def main():
     """, unsafe_allow_html=True)
     
     # Load data
-    csv_path = 'data/data_stunting.csv'
-    geojson_path = 'data/kecamatan_sidoarjo.geojson'
+    csv_path = 'data_skrinning_stunting(1).csv'
+    geojson_path = 'kecamatan_sidoarjo.geojson'
     
     with st.spinner('Memuat data...'):
         df = load_csv_data(csv_path)
@@ -462,5 +462,4 @@ def main():
     """.format(datetime.now().strftime("%d %B %Y")), unsafe_allow_html=True)
 
 if __name__ == "__main__":
-
     main()
