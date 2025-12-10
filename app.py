@@ -45,7 +45,7 @@ st.markdown("""
 def load_csv_data(file_path):
     """Load and process CSV data"""
     try:
-        df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep='\t', encoding='utf-8')
+        df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=',', encoding='utf-8')
         return df
     except Exception as e:
         st.error(f"Error loading CSV: {e}")
@@ -470,3 +470,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
