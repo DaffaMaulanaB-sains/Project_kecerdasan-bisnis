@@ -51,9 +51,15 @@ def load_csv_data(file_path):
                 df = pd.read_csv("data/data_skrinning_stunting(1).csv", sep=sep, encoding='utf-8', on_bad_lines='skip')
                 if len(df.columns) > 5:  # Valid if more than 5 columns
                     return df
+            except:
+                continue
         
-        
-    
+        # If all fail, try auto-detect
+        df = pd.read_csv("data/data_skrinning_stunting(1).csv", encoding='utf-8', on_bad_lines='skip')
+        return df
+    except Exception as e:
+        st.error(f"Error loading CSV: {e}")
+        return None
 
 @st.cache_data
 def load_geojson_data(file_path):
@@ -477,5 +483,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
