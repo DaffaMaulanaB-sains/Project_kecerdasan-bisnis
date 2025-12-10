@@ -11,7 +11,7 @@ st.set_page_config(page_title="Dashboard Stunting", layout="wide")
 # ============================
 @st.cache_data
 def load_data():
-    df = pd.read_csv("data_skrinning_stunting(1).csv")
+    df = pd.read_csv("data/data_skrinning_stunting(1).csv")
 
     # Normalisasi nama kecamatan
     df["nama_kecamatan"] = (
@@ -20,7 +20,7 @@ def load_data():
         .str.strip()
     )
 
-    with open("kecamatan_sidoarjo.geojson", "r", encoding="utf-8") as f:
+    with open("data/kecamatan_sidoarjo.geojson", "r", encoding="utf-8") as f:
         geojson = json.load(f)
 
     # Normalisasi GeoJSON
@@ -119,3 +119,4 @@ with tab2:
 
 st.markdown("---")
 st.caption(f"Update terakhir: {datetime.now().strftime('%d %B %Y')}")
+
